@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="react.min.js"></script>
+		<script src="react-dom.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+	</head>
+	<body>
+		<style type="text/css">
+			.uWrap{
+				border: 1px dashed #ccc;
+				margin: 10px;
+				width: 200px;
+			}
+			.wrap{
+				background: #f3f3f3;
+				padding: 10px;
+				margin: 0 auto;
+				width: 1200px;
+			}
+		</style>
+
+
+
+
+		<div id="content"></div>
+
+		<script type="text/babel">
+			var contacts = [
+				{
+					id: 1,
+					name: 'Bas',
+					phone: '1111',
+					img: 'http://pickaface.net/includes/themes/clean/img/slide2.png'
+				},
+				{
+					id: 2,
+					name: 'KOS',
+					phone: '2222',
+					img: 'http://pickaface.net/includes/themes/clean/img/slide2.png'
+				},
+				{
+					id: 3,
+					name: 'Hanry',
+					phone: '1111',
+					img: 'http://pickaface.net/includes/themes/clean/img/slide2.png'
+				}
+			];
+
+			var Contact = React.createClass({
+				render: function(){
+					return <li className='uWrap'>
+								<p>{this.props.name}</p>
+								<p>{this.props.phone}</p>
+								<p><img src={this.props.img} width="60px" height="60px"/></p>
+							</li>
+				}
+			})
+
+			var UserListCon = React.createClass({
+				
+				getInitialState: function (){
+					return{
+						displayedContacts: contacts
+					};
+				},
+
+				hendleSearch: function(event){
+					var getQuery = event.target.value.toLowerCase();
+					var displayedContacts = contacts.filter(function(el){
+						var searchV = el.name.toLowerCase();
+						return searchV.indexOf(getQuery) !== -1;
+					});
+					console.log(displayedContacts);
+					this.setState({
+						displayedContacts: displayedContacts
+					});
+				},
+				
+				render: function() {
+					return <div className="wrap">
+								<input 
+									type="text" 
+									onChange={this.hendleSearch} 
+								/>
+								<ul>
+									{
+										this.state.displayedContacts.map(function(element){
+											return <Contact 
+													key={element.id} 
+													name={element.name} 
+													phone={element.phone} 
+													img={element.img} 
+													/>
+										})
+									}
+								</ul>
+						   </div>;
+				}
+
+			});
+
+
+			ReactDOM.render(
+				<UserListCon />, 
+				document.getElementById('content')
+			);
+
+		</script>
+
+	</body>
+</html>
